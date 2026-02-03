@@ -3,6 +3,7 @@ const maybeBtn = document.getElementById("maybeBtn");
 
 let clickCount = 0;
 
+// Text progression for the "maybe" button
 const maybeTexts = [
   "Are you sure?",
   "Are you REALLY sure?",
@@ -17,15 +18,39 @@ const maybeTexts = [
 ];
 
 // Sound effects
-const popSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3");
-const panicSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3");
+const popSound = new Audio(
+  "https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"
+);
+const panicSound = new Audio(
+  "https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"
+);
 
+// MAYBE button behavior
 maybeBtn.addEventListener("click", () => {
   clickCount++;
 
-  // YES button grows
+  // YES button grows every time
   const scale = 1 + clickCount * 0.18;
   yesBtn.style.transform = `scale(${scale})`;
+
+  // YES button slowly takes over the page
+  if (scale > 2.2) {
+    yesBtn.style.position = "relative";
+    yesBtn.style.zIndex = "10";
+  }
+
+  if (scale > 3) {
+    yesBtn.style.fontSize = "2rem";
+  }
+
+  if (scale > 4) {
+    yesBtn.style.width = "80vw";
+  }
+
+  if (scale > 5) {
+    yesBtn.style.width = "95vw";
+    yesBtn.style.height = "20vh";
+  }
 
   // MAYBE button panics
   maybeBtn.classList.add("shake");
@@ -36,11 +61,12 @@ maybeBtn.addEventListener("click", () => {
     maybeBtn.classList.remove("shake");
   }, 400);
 
-  // Text changes
+  // Change MAYBE text
   const textIndex = Math.min(clickCount - 1, maybeTexts.length - 1);
   maybeBtn.textContent = maybeTexts[textIndex];
 });
 
+// YES button click = finale
 yesBtn.addEventListener("click", () => {
   popSound.play();
 
@@ -52,7 +78,7 @@ yesBtn.addEventListener("click", () => {
       align-items: center;
       background: radial-gradient(circle, #ff4d6d, #c9184a);
       color: white;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       text-align: center;
       padding: 40px;
     ">
@@ -63,4 +89,5 @@ yesBtn.addEventListener("click", () => {
     </div>
   `;
 });
+
 
