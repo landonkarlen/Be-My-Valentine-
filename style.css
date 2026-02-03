@@ -1,36 +1,38 @@
 body {
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 .container {
   text-align: center;
   background: white;
-  padding: 40px;
+  padding: 30px;
   border-radius: 25px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  max-width: 90vw;
 }
 
 h1 {
   color: #d6336c;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .camel {
-  width: 250px;
+  width: 220px;
+  max-width: 80vw;
   border-radius: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .buttons {
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 15px;
 }
 
 button {
@@ -51,3 +53,17 @@ button {
   background-color: #adb5bd;
   color: white;
 }
+
+/* Panic animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
