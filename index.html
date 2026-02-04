@@ -2,33 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Important Valentine Question</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="page">
-    <div class="container" role="region" aria-labelledby="heading">
-      <h1 id="heading">Before you answer…</h1>
 
-      <img
-        src="camel.png"
-        alt="Camel pulling heart from top hat"
-        class="camel"
-      />
+  <main>
+    <h1>Before you answer…</h1>
 
-      <div class="buttons" id="buttonWrapper">
-        <button id="yesBtn" class="btn primary">YES!</button>
-        <button id="maybeBtn" class="btn secondary">I’ll think about it</button>
-      </div>
+    <!-- CAMEL IMAGE -->
+    <img
+      src="camel.png"
+      alt="A cartoony three-humped camel pulling a heart out of a top hat"
+    />
 
-      <div id="message" class="sr-only" aria-live="polite"></div>
+    <!-- BUTTONS -->
+    <div class="buttons">
+      <button id="yesBtn">YES!</button>
+      <button id="maybeBtn">I’ll think about it</button>
     </div>
-
-    <!-- container for floating hearts -->
-    <div id="hearts"></div>
   </main>
 
+  <!-- Script -->
   <script src="script.js"></script>
+
 </body>
 </html>
