@@ -17,18 +17,40 @@ const maybeTexts = [
 ];
 
 // Sounds
-const boomSound = new Audio(
-  "https://assets.mixkit.co/sfx/preview/mixkit-explosion-impact-1708.mp3"
-);
-const panicSound = new Audio(
-  "https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"
-);
+const boomSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-explosion-impact-1708.mp3");
+const panicSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3");
 
-// MAYBE button behavior
+// Inject animation styles (self-contained, no CSS file needed)
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes explode {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(20); opacity: 0; }
+}
+
+@keyframes shockwave {
+  from { transform: scale(0.2); opacity: 0.8; }
+  to { transform: scale(6); opacity: 0; }
+}
+
+@keyframes fall {
+  to { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-10px,10px); }
+  50% { transform: translate(10px,-10px); }
+  75% { transform: translate(-10px,-10px); }
+  100% { transform: translate(0,0); }
+}
+`;
+document.head.appendChild(style);
+
+// MAYBE button logic
 maybeBtn.addEventListener("click", () => {
   clickCount++;
 
-  // YES button grows
   const scale = 1 + clickCount * 0.18;
   yesBtn.style.transform = `scale(${scale})`;
 
@@ -38,54 +60,91 @@ maybeBtn.addEventListener("click", () => {
     yesBtn.style.fontSize = "2.5rem";
   }
 
-  // Panic animation
-  maybeBtn.classList.add("shake");
   panicSound.currentTime = 0;
   panicSound.play();
 
-  setTimeout(() => {
-    maybeBtn.classList.remove("shake");
-  }, 400);
-
-  // Change text
   const textIndex = Math.min(clickCount - 1, maybeTexts.length - 1);
   maybeBtn.textContent = maybeTexts[textIndex];
 });
 
-// YES button = EXPLOSION
+// YES BUTTON = ABSOLUTE CHAOS
 yesBtn.addEventListener("click", () => {
+  boomSound.currentTime = 0;
   boomSound.play();
 
-  // Screen shake
-  document.body.classList.add("shake-screen");
+  document.body.style.animation = "screenShake 0.6s";
 
-  // Explosion element
+  const rect = yesBtn.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  // Core explosion
   const explosion = document.createElement("div");
-  explosion.className = "explosion";
+  explosion.style.position = "fixed";
+  explosion.style.left = `${centerX}px`;
+  explosion.style.top = `${centerY}px`;
+  explosion.style.width = "40px";
+  explosion.style.height = "40px";
+  explosion.style.background = "radial-gradient(circle, #fff, #ff4d6d, #c9184a)";
+  explosion.style.borderRadius = "50%";
+  explosion.style.transform = "translate(-50%, -50%)";
+  explosion.style.animation = "explode 0.8s ease-out forwards";
+  explosion.style.zIndex = "9999";
   document.body.appendChild(explosion);
 
-  // After explosion, show finale
+  // Shockwaves
+  for (let i = 0; i < 3; i++) {
+    const ring = document.createElement("div");
+    ring.style.position = "fixed";
+    ring.style.left = `${centerX}px`;
+    ring.style.top = `${centerY}px`;
+    ring.style.width = "60px";
+    ring.style.height = "60px";
+    ring.style.border = "4px solid rgba(255,77,109,0.8)";
+    ring.style.borderRadius = "50%";
+    ring.style.transform = "translate(-50%, -50%)";
+    ring.style.animation = `shockwave 1.2s ease-out ${i * 0.15}s forwards`;
+    ring.style.zIndex = "9998";
+    document.body.appendChild(ring);
+  }
+
+  // Heart confetti
+  for (let i = 0; i < 40; i++) {
+    const heart = document.createElement("div");
+    heart.textContent = "💖";
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "-5vh";
+    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    heart.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+    heart.style.zIndex = "9997";
+    document.body.appendChild(heart);
+  }
+
+  // Finale screen
   setTimeout(() => {
     document.body.innerHTML = `
       <div style="
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: radial-gradient(circle, #ff4d6d, #c9184a);
-        color: white;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 40px;
+        height:100vh;
+        background:radial-gradient(circle,#ff4d6d,#c9184a);
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        color:white;
+        font-family:Arial;
+        text-align:center;
+        padding:40px;
       ">
-        <h1 style="font-size: 3rem;">
-          💘 BOOM 💘<br><br>
-          You chose correctly.<br>
-          The camel is VERY proud.
+        <img src="camel.png" style="width:260px;margin-bottom:30px;" />
+        <h1 style="font-size:3rem;">
+          💘 YOU CHOSE CORRECTLY 💘
         </h1>
+        <p style="font-size:1.4rem;">
+          The camel descends.<br>
+          Love has been confirmed.
+        </p>
       </div>
     `;
-  }, 900);
+  }, 1100);
 });
-
-
