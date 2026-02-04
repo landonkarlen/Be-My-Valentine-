@@ -28,6 +28,11 @@ h1 {
   border-radius: 20px;
   margin-bottom: 25px;
 }
+button {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
 
 .buttons {
   display: flex;
