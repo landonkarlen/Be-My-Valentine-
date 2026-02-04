@@ -3,7 +3,6 @@ const maybeBtn = document.getElementById("maybeBtn");
 
 let clickCount = 0;
 
-// Text progression for the "maybe" button
 const maybeTexts = [
   "Are you sure?",
   "Are you REALLY sure?",
@@ -17,9 +16,9 @@ const maybeTexts = [
   "There is only one answer."
 ];
 
-// Sound effects
-const popSound = new Audio(
-  "https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3"
+// Sounds
+const boomSound = new Audio(
+  "https://assets.mixkit.co/sfx/preview/mixkit-explosion-impact-1708.mp3"
 );
 const panicSound = new Audio(
   "https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-laugh-343.mp3"
@@ -29,30 +28,17 @@ const panicSound = new Audio(
 maybeBtn.addEventListener("click", () => {
   clickCount++;
 
-  // YES button grows every time
+  // YES button grows
   const scale = 1 + clickCount * 0.18;
   yesBtn.style.transform = `scale(${scale})`;
 
-  // YES button slowly takes over the page
-  if (scale > 2.2) {
-    yesBtn.style.position = "relative";
-    yesBtn.style.zIndex = "10";
-  }
-
   if (scale > 3) {
-    yesBtn.style.fontSize = "2rem";
-  }
-
-  if (scale > 4) {
-    yesBtn.style.width = "80vw";
-  }
-
-  if (scale > 5) {
-    yesBtn.style.width = "95vw";
+    yesBtn.style.width = "90vw";
     yesBtn.style.height = "20vh";
+    yesBtn.style.fontSize = "2.5rem";
   }
 
-  // MAYBE button panics
+  // Panic animation
   maybeBtn.classList.add("shake");
   panicSound.currentTime = 0;
   panicSound.play();
@@ -61,33 +47,45 @@ maybeBtn.addEventListener("click", () => {
     maybeBtn.classList.remove("shake");
   }, 400);
 
-  // Change MAYBE text
+  // Change text
   const textIndex = Math.min(clickCount - 1, maybeTexts.length - 1);
   maybeBtn.textContent = maybeTexts[textIndex];
 });
 
-// YES button click = finale
+// YES button = EXPLOSION
 yesBtn.addEventListener("click", () => {
-  popSound.play();
+  boomSound.play();
 
-  document.body.innerHTML = `
-    <div style="
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle, #ff4d6d, #c9184a);
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    ">
-      <h1 style="font-size: 3rem;">
-        💘 EXCELLENT CHOICE 💘<br><br>
-        The camel knew all along.
-      </h1>
-    </div>
-  `;
+  // Screen shake
+  document.body.classList.add("shake-screen");
+
+  // Explosion element
+  const explosion = document.createElement("div");
+  explosion.className = "explosion";
+  document.body.appendChild(explosion);
+
+  // After explosion, show finale
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div style="
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle, #ff4d6d, #c9184a);
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 40px;
+      ">
+        <h1 style="font-size: 3rem;">
+          💘 BOOM 💘<br><br>
+          You chose correctly.<br>
+          The camel is VERY proud.
+        </h1>
+      </div>
+    `;
+  }, 900);
 });
 
 
