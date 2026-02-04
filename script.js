@@ -1,93 +1,81 @@
-let noClickCount = 0;
+let maybeClickCount = 0;
 
 const yesButton = document.getElementById("yesBtn");
-const noButton = document.getElementById("noBtn");
+const maybeButton = document.getElementById("maybeBtn");
 
-const noTexts = [
+const maybeTexts = [
   "I’ll think about it",
   "Are you sure?",
   "Are you REALLY sure?",
-  "Like… 100% sure?",
-  "This is getting suspicious",
-  "Bro come on",
-  "The camel is judging you",
-  "This button is tired",
-  "Just click yes already",
-  "Okay this is dramatic",
-  "Last chance 😤"
+  "Like… absolutely sure?",
+  "The camel is offended",
+  "This is getting awkward",
+  "Just say yes 😭",
+  "I’m running out of patience",
+  "Okay now you’re doing this on purpose",
+  "LAST CHANCE"
 ];
 
-// --------- NO BUTTON BEHAVIOR ----------
-noButton.addEventListener("click", () => {
-  noClickCount++;
+// ----- MAYBE BUTTON -----
+maybeButton.addEventListener("click", () => {
+  maybeClickCount++;
 
-  // Change text
-  noButton.textContent =
-    noTexts[Math.min(noClickCount, noTexts.length - 1)];
+  maybeButton.textContent =
+    maybeTexts[Math.min(maybeClickCount, maybeTexts.length - 1)];
 
   // Grow YES button
-  const scale = 1 + noClickCount * 0.25;
+  const scale = 1 + maybeClickCount * 0.25;
   yesButton.style.transform = `scale(${scale})`;
 
-  // Panic shake
-  noButton.classList.add("shake");
-  setTimeout(() => noButton.classList.remove("shake"), 300);
+  // Shake maybe
+  maybeButton.classList.add("shake");
+  setTimeout(() => maybeButton.classList.remove("shake"), 300);
 
-  // Make NO button move randomly
+  // Panic movement
   const x = Math.random() * 200 - 100;
   const y = Math.random() * 200 - 100;
-  noButton.style.transform = `translate(${x}px, ${y}px)`;
+  maybeButton.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// --------- YES BUTTON EXPLOSION ----------
+// ----- YES BUTTON -----
 yesButton.addEventListener("click", () => {
-  triggerExplosion();
-  triggerScreenShake();
-  triggerParticles();
+  explode();
+  shakeScreen();
+  spawnParticles();
 
-  // Remove buttons after click
   yesButton.remove();
-  noButton.remove();
+  maybeButton.remove();
 
-  // Final message
   setTimeout(() => {
-    const message = document.createElement("div");
-    message.innerHTML = "💖 YOU SAID YES 💖<br><span>Best decision ever.</span>";
-    message.className = "final-message";
-    document.body.appendChild(message);
-  }, 800);
+    const msg = document.createElement("div");
+    msg.className = "final-message";
+    msg.innerHTML = "💖 YOU SAID YES 💖<br><span>The camel approves.</span>";
+    document.body.appendChild(msg);
+  }, 700);
 });
 
-// --------- EXPLOSION FLASH ----------
-function triggerExplosion() {
+// ----- EFFECTS -----
+function explode() {
   const flash = document.createElement("div");
   flash.className = "explosion-flash";
   document.body.appendChild(flash);
-
   setTimeout(() => flash.remove(), 600);
 }
 
-// --------- SCREEN SHAKE ----------
-function triggerScreenShake() {
+function shakeScreen() {
   document.body.classList.add("screen-shake");
-  setTimeout(() => {
-    document.body.classList.remove("screen-shake");
-  }, 600);
+  setTimeout(() => document.body.classList.remove("screen-shake"), 600);
 }
 
-// --------- PARTICLES ----------
-function triggerParticles() {
+function spawnParticles() {
   for (let i = 0; i < 80; i++) {
-    const particle = document.createElement("div");
-    particle.className = "particle";
-    particle.textContent = Math.random() > 0.5 ? "❤️" : "🔥";
-
-    particle.style.left = Math.random() * window.innerWidth + "px";
-    particle.style.top = Math.random() * window.innerHeight + "px";
-    particle.style.fontSize = Math.random() * 30 + 20 + "px";
-
-    document.body.appendChild(particle);
-
-    setTimeout(() => particle.remove(), 1500);
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.textContent = Math.random() > 0.5 ? "❤️" : "🔥";
+    p.style.left = Math.random() * window.innerWidth + "px";
+    p.style.top = Math.random() * window.innerHeight + "px";
+    p.style.fontSize = Math.random() * 30 + 20 + "px";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
   }
 }
